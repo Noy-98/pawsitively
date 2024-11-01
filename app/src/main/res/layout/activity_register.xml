@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="387dp"
+        android:layout_height="58dp"
+        android:hint="Email" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="387dp"
+        android:layout_height="56dp"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="385dp"
+        android:layout_height="57dp"
+        android:hint="Name" />
+
+    <EditText
+        android:id="@+id/ageEditText"
+        android:layout_width="389dp"
+        android:layout_height="56dp"
+        android:hint="Age" />
+
+    <EditText
+        android:id="@+id/genderEditText"
+        android:layout_width="391dp"
+        android:layout_height="58dp"
+        android:hint="Gender" />
+
+    <EditText
+        android:id="@+id/contactNumberEditText"
+        android:layout_width="392dp"
+        android:layout_height="60dp"
+        android:hint="Contact Number" />
+
+    <EditText
+        android:id="@+id/addressEditText"
+        android:layout_width="393dp"
+        android:layout_height="65dp"
+        android:hint="Address" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register" />
+
+</LinearLayout>

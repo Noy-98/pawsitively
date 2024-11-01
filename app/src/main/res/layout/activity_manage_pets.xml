@@ -1,0 +1,178 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mainbg"
+    tools:context=".ManagePets">
+
+    <!-- Pet Image at the top center -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/petImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/image_placeholder"
+        android:contentDescription="Pet Image" />
+
+    <!-- Pets Name Label -->
+    <TextView
+        android:id="@+id/PetsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/petImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:text="Pets Name"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <!-- Pets Name EditText -->
+    <EditText
+        android:id="@+id/PetName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/PetsLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:hint="Enter your Pet's Name"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="#FFFFFF"/>
+
+    <!-- Breed Label -->
+    <TextView
+        android:id="@+id/BreedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Breed"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@id/PetName"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Breed EditText -->
+    <EditText
+        android:id="@+id/Breed"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/BreedLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Enter your Pet's Breed"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="#FFFFFF"/>
+
+    <!-- Birthday Label -->
+    <TextView
+        android:id="@+id/BirthdayLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Birthday"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@id/Breed"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Birthday EditText -->
+    <EditText
+        android:id="@+id/Birthday"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/BirthdayLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Select your Pet's Birthday"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="#FFFFFF"
+        android:focusable="false"/> <!-- Set focusable to false to prevent keyboard from showing -->
+
+    <!-- Gender Label -->
+    <TextView
+        android:id="@+id/GenderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@id/Birthday"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Gender Spinner -->
+    <Spinner
+        android:id="@+id/Gender"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/GenderLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Pet Type Label -->
+    <TextView
+        android:id="@+id/PetTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pet Type"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@id/Gender"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Pet Type Spinner -->
+    <Spinner
+        android:id="@+id/PetType"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/PetTypeLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginTop="2dp"/>
+
+    <!-- Add Pet Button -->
+
+    <Button
+        android:id="@+id/Signup"
+        android:layout_width="384dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PetType"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="2dp"
+        android:paddingRight="10dp"
+        android:text="Add Pet" />
+
+    <Button
+        android:id="@+id/uploadImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/petImageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:text="Upload Pet Photo" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="48dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/left"
+        app:tint="#4A3B2C" />
+
+</RelativeLayout>

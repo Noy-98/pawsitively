@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "535315386372",
+    "project_id": "pawsitively-b9527",
+    "storage_bucket": "pawsitively-b9527.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535315386372:android:d29dab502b1e1f40ad2551",
+        "android_client_info": {
+          "package_name": "com.example.pawsitively"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIvLhw7ytDNhTCFw-LSigUUgpu8Dctq0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

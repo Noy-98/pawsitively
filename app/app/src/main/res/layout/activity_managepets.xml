@@ -1,0 +1,90 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mainbg"
+    tools:context=".Login">
+
+    <!-- Email Label -->
+    <TextView
+        android:id="@+id/PetsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pets Name"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="250dp"/>
+
+    <!-- Email EditText -->
+    <EditText
+        android:id="@+id/Email"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/PetsLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Enter your Pets Name"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="#FFFFFF"/>
+
+    <!-- Password Label -->
+    <TextView
+        android:id="@+id/BreedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Breed"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@id/Email"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Password EditText -->
+    <EditText
+        android:id="@+id/Password"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@id/BreedLabel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Enter your Pets Breed"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:background="#FFFFFF"/>
+
+
+
+
+    <Button
+        android:id="@+id/Signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Password"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Add pet" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="48dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left"
+        app:tint="#4A3B2C" />
+
+
+</RelativeLayout>
