@@ -1,5 +1,6 @@
 package com.example.pawsitively;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,10 +10,12 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,9 +32,9 @@ public class Edituser extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference db;
 
-    private TextInputEditText nameEditText, ageEditText, genderEditText, emailEditText, contactNumberEditText, addressEditText;
-    private Button saveButton;
-    private ImageButton backButton;
+    private TextInputEditText nameEditText, ageEditText, genderEditText, contactNumberEditText, addressEditText;
+    private AppCompatButton saveButton;
+    private FloatingActionButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +57,10 @@ public class Edituser extends AppCompatActivity {
         nameEditText = findViewById(R.id.nameEditText);
         ageEditText = findViewById(R.id.ageEditText);
         genderEditText = findViewById(R.id.genderEditText);
-        emailEditText = findViewById(R.id.emailEditText);
         contactNumberEditText = findViewById(R.id.contactNumberEditText);
         addressEditText = findViewById(R.id.addressEditText);
         saveButton = findViewById(R.id.saveButton);
-        backButton = findViewById(R.id.imageButton); // Assuming this is your back button
+        backButton = findViewById(R.id.go_back_bttn); // Assuming this is your back button
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -73,7 +75,7 @@ public class Edituser extends AppCompatActivity {
         saveButton.setOnClickListener(v -> saveUserData());
 
         // Set up back button click listener
-        backButton.setOnClickListener(v -> onBackPressed());
+        backButton.setOnClickListener(view -> startActivity(new Intent(Edituser.this, SettingsDashboard.class)));
     }
 
     private void loadUserData() {
@@ -88,7 +90,6 @@ public class Edituser extends AppCompatActivity {
                             nameEditText.setText(userData.getName());
                             ageEditText.setText(userData.getAge());
                             genderEditText.setText(userData.getGender());
-                            emailEditText.setText(userData.getEmail());
                             contactNumberEditText.setText(userData.getContactNumber());
                             addressEditText.setText(userData.getAddress());
                         }
@@ -114,7 +115,6 @@ public class Edituser extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            String email = emailEditText.getText().toString().trim();
             String name = nameEditText.getText().toString().trim();
             String age = ageEditText.getText().toString().trim();
             String gender = genderEditText.getText().toString().trim();
@@ -132,7 +132,6 @@ public class Edituser extends AppCompatActivity {
             userData.put("name", name);
             userData.put("age", age);
             userData.put("gender", gender);
-            userData.put("email", email);
             userData.put("contactNumber", contactNumber);
             userData.put("address", address);
 
@@ -157,7 +156,6 @@ public class Edituser extends AppCompatActivity {
         nameEditText.setText("");
         ageEditText.setText("");
         genderEditText.setText("");
-        emailEditText.setText("");
         contactNumberEditText.setText("");
         addressEditText.setText("");
     }
@@ -167,7 +165,6 @@ public class Edituser extends AppCompatActivity {
         private String name;
         private String age;
         private String gender;
-        private String email;
         private String contactNumber;
         private String address;
 
@@ -175,11 +172,10 @@ public class Edituser extends AppCompatActivity {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public User(String name, String age, String gender, String email, String contactNumber, String address) {
+        public User(String name, String age, String gender, String contactNumber, String address) {
             this.name = name;
             this.age = age;
             this.gender = gender;
-            this.email = email;
             this.contactNumber = contactNumber;
             this.address = address;
         }
@@ -207,14 +203,6 @@ public class Edituser extends AppCompatActivity {
 
         public void setGender(String gender) {
             this.gender = gender;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
 
         public String getContactNumber() {

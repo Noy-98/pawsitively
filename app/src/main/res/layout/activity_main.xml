@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,20 +7,17 @@
     android:background="@drawable/bg"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/Login"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/getStarted"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:layout_marginTop="450dp"
-        android:text="Login" />
+        android:text="Get Started"
+        android:textColor="#986327"
+        android:background="@drawable/button_ripple_effect"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="30dp"/>
 
-    <Button
-        android:id="@+id/Signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_below="@id/Login"
-        android:layout_marginTop="16dp"
-        android:text="Sign Up" />
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

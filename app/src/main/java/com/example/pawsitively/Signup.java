@@ -1,5 +1,7 @@
 package com.example.pawsitively;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,9 +14,15 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,15 +30,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Signup extends AppCompatActivity {
-    private EditText emailEditText, passwordEditText, nameEditText, ageEditText, genderEditText, contactNumberEditText, addressEditText;
-    private Button registerButton;
-    private CheckBox showPasswordCheckBox;
+    private TextInputEditText emailEditText, passwordEditText, nameEditText, ageEditText, genderEditText, contactNumberEditText, addressEditText;
+    private AppCompatButton registerButton;
+    private FloatingActionButton BackButton;
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
@@ -44,28 +57,13 @@ public class Signup extends AppCompatActivity {
         contactNumberEditText = findViewById(R.id.contactNumberEditText);
         addressEditText = findViewById(R.id.addressEditText);
         registerButton = findViewById(R.id.registerButton);
-        showPasswordCheckBox = findViewById(R.id.showPasswordCheckBox);
-        ImageButton backButton = findViewById(R.id.imageButton);
+        BackButton = findViewById(R.id.go_back_bttn);
 
-        // Show/Hide Password
-        showPasswordCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            } else {
-                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            }
-            passwordEditText.setSelection(passwordEditText.length());
-        });
+        BackButton.setOnClickListener(view -> startActivity(new Intent(Signup.this, Login.class)));
 
         // Set up register button click listener
         registerButton.setOnClickListener(v -> registerUser());
 
-        // Set up back button click listener
-        backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(Signup.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Close the Signup activity
-        });
     }
 
     private void registerUser() {

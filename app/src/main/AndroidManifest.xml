@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,11 +16,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pawsitively"
         tools:targetApi="31">
+        <activity
+            android:name=".SettingsDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".MapsDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".HomeDashboard"
+            android:exported="false" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".CommunityChatActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-
+        <activity
+            android:name=".CommunityChatActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
@@ -39,11 +50,10 @@
         <activity
             android:name=".UserAccount"
             android:exported="false" />
-
         <activity
             android:name=".Message"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ManagePets"
             android:exported="false" />

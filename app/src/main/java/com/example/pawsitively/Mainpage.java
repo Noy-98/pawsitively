@@ -42,15 +42,6 @@ public class Mainpage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_mainpage);
 
-        // Check if user is logged in
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            // User is not logged in, redirect to login activity
-            startActivity(new Intent(Mainpage.this, MainActivity.class));
-            finish();
-            return;
-        }
-
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
