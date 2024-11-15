@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mainpage extends AppCompatActivity {
-    private Button logoutButton;
     private boolean doubleBackToExitPressedOnce = false;
     private RecyclerView petRecyclerView;
     private PetAdapter petAdapter;
@@ -61,10 +60,6 @@ public class Mainpage extends AppCompatActivity {
         petRecyclerView.setAdapter(petAdapter);
 
         loadPets();
-
-        // Initialize logout button and set its click listener
-        logoutButton = findViewById(R.id.Logout);
-        logoutButton.setOnClickListener(view -> logoutUser());
 
         // Initialize image view buttons and set click listeners
         initializeNavigationButtons();
@@ -101,18 +96,6 @@ public class Mainpage extends AppCompatActivity {
     private void initializeNavigationButtons() {
         ImageView petsButton = findViewById(R.id.imageView2);
         petsButton.setOnClickListener(v -> startActivity(new Intent(Mainpage.this, ManagePets.class)));
-
-        ImageView userAccountButton = findViewById(R.id.imageView);
-        userAccountButton.setOnClickListener(v -> startActivity(new Intent(Mainpage.this, UserAccount.class)));
-
-        ImageView messageButton = findViewById(R.id.imageView1);
-        messageButton.setOnClickListener(v -> {
-            // Replace with actual logic to get recipient user ID
-            String recipientUserId = "someUserId"; // Get the recipient user ID based on your logic
-            Intent intent = new Intent(Mainpage.this, Message.class);
-            intent.putExtra("recipientUserId", recipientUserId); // Pass the recipient ID
-            startActivity(intent);
-        });
     }
 
     @Override
