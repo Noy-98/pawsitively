@@ -64,4 +64,10 @@
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_delete_24"/>
 </LinearLayout>

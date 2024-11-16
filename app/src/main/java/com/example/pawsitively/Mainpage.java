@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,8 @@ public class Mainpage extends AppCompatActivity {
     private List<ManagePets.Pet> petList;
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
+
+    private FloatingActionButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +59,32 @@ public class Mainpage extends AppCompatActivity {
         petRecyclerView = findViewById(R.id.petRecyclerView);
         petRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         petList = new ArrayList<>();
-        petAdapter = new PetAdapter(petList);
+        petAdapter = new PetAdapter(petList, this);
         petRecyclerView.setAdapter(petAdapter);
+        backButton = findViewById(R.id.go_back_bttn);
 
         loadPets();
 
         // Initialize image view buttons and set click listeners
         initializeNavigationButtons();
+
+        backButton.setOnClickListener(view -> startActivity(new Intent(Mainpage.this, HomeDashboard.class)));
     }
 
     private void loadPets() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                petList.clear();
+                petList.clear(); // Clear the list before adding new data
                 for (DataSnapshot petSnapshot : dataSnapshot.getChildren()) {
                     ManagePets.Pet pet = petSnapshot.getValue(ManagePets.Pet.class);
                     if (pet != null) {
+                        // Set the petId from the database key
+                        pet.petId = petSnapshot.getKey();
                         petList.add(pet);
                     }
                 }
-                petAdapter.notifyDataSetChanged();
+                petAdapter.notifyDataSetChanged(); // Notify adapter to refresh the RecyclerView
             }
 
             @Override
@@ -86,28 +94,8 @@ public class Mainpage extends AppCompatActivity {
         });
     }
 
-    private void logoutUser() {
-        FirebaseAuth.getInstance().signOut();
-        Toast.makeText(Mainpage.this, "Successful Logout", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(Mainpage.this, MainActivity.class));
-        finish();
-    }
-
     private void initializeNavigationButtons() {
         ImageView petsButton = findViewById(R.id.imageView2);
         petsButton.setOnClickListener(v -> startActivity(new Intent(Mainpage.this, ManagePets.class)));
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 }

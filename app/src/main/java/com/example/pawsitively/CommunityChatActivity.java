@@ -1,5 +1,6 @@
 package com.example.pawsitively;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -7,9 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,16 +36,28 @@ public class CommunityChatActivity extends AppCompatActivity {
     private DatabaseReference userRef;
     private EditText messageInput;
     private Button sendButton;
+
+    private FloatingActionButton go_back_bttn;
     private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_community_chat);
+
+        // Handle window insets
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
 
         communityChatListView = findViewById(R.id.communityChatListView);
         messageInput = findViewById(R.id.messageInput);
         sendButton = findViewById(R.id.sendButton);
+        go_back_bttn = findViewById(R.id.go_back_bttn);
 
         communityChats = new ArrayList<>();
         communityChatAdapter = new CommunityChatAdapter(this, communityChats);
@@ -50,6 +68,8 @@ public class CommunityChatActivity extends AppCompatActivity {
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
 
         loadCommunityMessages();
+
+        go_back_bttn.setOnClickListener(view -> startActivity(new Intent(CommunityChatActivity.this, HomeDashboard.class)));
 
         sendButton.setOnClickListener(v -> sendMessage());
     }

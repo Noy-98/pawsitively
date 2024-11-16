@@ -17,9 +17,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,11 +39,13 @@ public class ManagePets extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int STORAGE_PERMISSION_CODE = 2;
 
-    private EditText petNameEditText, breedEditText, birthdayEditText;
+    private TextInputEditText petNameEditText, breedEditText, birthdayEditText;
     private Spinner genderSpinner, petTypeSpinner;
-    private Button addPetButton, uploadImageButton;
+    private Button uploadImageButton;
+
+    private AppCompatButton addPetButton;
     private ImageView petImageView;
-    private ImageButton backButton;
+    private FloatingActionButton backButton;
 
     private Uri petImageUri;
 
@@ -50,6 +58,13 @@ public class ManagePets extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_pets);
 
+        // Handle window insets
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         storageReference = FirebaseStorage.getInstance().getReference("pet_images");
@@ -60,7 +75,7 @@ public class ManagePets extends AppCompatActivity {
         genderSpinner = findViewById(R.id.Gender);
         petTypeSpinner = findViewById(R.id.PetType);
         addPetButton = findViewById(R.id.Signup);
-        backButton = findViewById(R.id.imageButton);
+        backButton = findViewById(R.id.go_back_bttn);
         uploadImageButton = findViewById(R.id.uploadImageButton);
         petImageView = findViewById(R.id.petImageView);
 
@@ -69,7 +84,7 @@ public class ManagePets extends AppCompatActivity {
         birthdayEditText.setOnClickListener(v -> showDatePickerDialog());
         uploadImageButton.setOnClickListener(v -> openImageChooser());
         addPetButton.setOnClickListener(v -> addPet());
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(view -> startActivity(new Intent(ManagePets.this, Mainpage.class)));
 
         checkStoragePermission();
     }
@@ -107,50 +122,23 @@ public class ManagePets extends AppCompatActivity {
         String gender = genderSpinner.getSelectedItem().toString();
         String petType = petTypeSpinner.getSelectedItem().toString();
 
-        // Validate if all fields are filled
-        if (petName.isEmpty()) {
-            petNameEditText.setError("Pet name is required");
-            petNameEditText.requestFocus();
-            return;
-        }
-
-        if (breed.isEmpty()) {
-            breedEditText.setError("Breed is required");
-            breedEditText.requestFocus();
-            return;
-        }
-
-        if (birthday.isEmpty()) {
-            birthdayEditText.setError("Birthday is required");
-            birthdayEditText.requestFocus();
-            return;
-        }
-
-        if (petImageUri == null) {
-            Toast.makeText(this, "Please upload an image of your pet", Toast.LENGTH_SHORT).show();
+        if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || petImageUri == null) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (firebaseAuth.getCurrentUser() != null) {
             String userId = firebaseAuth.getCurrentUser().getUid();
-
             String petId = databaseReference.child(userId).child("pets").push().getKey();
-            Pet newPet = new Pet(petName, breed, birthday, gender, petType);
 
-            addPetButton.setEnabled(false); // Disable the button to prevent multiple clicks
+            Pet newPet = new Pet(petId, petName, breed, birthday, gender, petType);
 
-            // Save pet data in Realtime Database
             databaseReference.child(userId).child("pets").child(petId).setValue(newPet)
-                    .addOnSuccessListener(aVoid -> {
-                        // Upload image to Firebase Storage if all data is valid
-                        uploadImageToFirebase(petId);
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(ManagePets.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        addPetButton.setEnabled(true); // Re-enable the button on failure
-                    });
+                    .addOnSuccessListener(aVoid -> uploadImageToFirebase(petId))
+                    .addOnFailureListener(e -> Toast.makeText(ManagePets.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
+
 
 
     private void uploadImageToFirebase(String petId) {
@@ -205,11 +193,13 @@ public class ManagePets extends AppCompatActivity {
     }
 
     public static class Pet {
+        public String petId;
         public String name, breed, birthday, gender, type, imageUrl;
 
         public Pet() {}
 
-        public Pet(String name, String breed, String birthday, String gender, String type) {
+        public Pet(String petId, String name, String breed, String birthday, String gender, String type) {
+            this.petId = petId;
             this.name = name;
             this.breed = breed;
             this.birthday = birthday;

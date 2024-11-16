@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class HomeDashboard extends AppCompatActivity {
 
-    private CardView addPets;
+    private CardView addPets, communityChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,9 @@ public class HomeDashboard extends AppCompatActivity {
         }
 
         addPets = findViewById(R.id.addPets);
+        communityChat = findViewById(R.id.communityChat);
+
         addPets.setOnClickListener(view -> startActivity(new Intent(HomeDashboard.this, Mainpage.class)));
+        communityChat.setOnClickListener(view -> startActivity(new Intent(HomeDashboard.this, CommunityChatActivity.class)));
     }
 }

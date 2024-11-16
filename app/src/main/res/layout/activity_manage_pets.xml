@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/mainbg"
     tools:context=".ManagePets">
-
-    <!-- Pet Image at the top center -->
+    <!--
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/petImageView"
         android:layout_width="100dp"
@@ -17,7 +16,6 @@
         android:background="@drawable/image_placeholder"
         android:contentDescription="Pet Image" />
 
-    <!-- Pets Name Label -->
     <TextView
         android:id="@+id/PetsLabel"
         android:layout_width="wrap_content"
@@ -29,7 +27,6 @@
         android:textColor="#000000"
         android:textStyle="bold" />
 
-    <!-- Pets Name EditText -->
     <EditText
         android:id="@+id/PetName"
         android:layout_width="match_parent"
@@ -43,7 +40,6 @@
         android:textStyle="bold"
         android:background="#FFFFFF"/>
 
-    <!-- Breed Label -->
     <TextView
         android:id="@+id/BreedLabel"
         android:layout_width="wrap_content"
@@ -55,7 +51,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Breed EditText -->
     <EditText
         android:id="@+id/Breed"
         android:layout_width="match_parent"
@@ -69,7 +64,6 @@
         android:textStyle="bold"
         android:background="#FFFFFF"/>
 
-    <!-- Birthday Label -->
     <TextView
         android:id="@+id/BirthdayLabel"
         android:layout_width="wrap_content"
@@ -81,9 +75,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Birthday EditText -->
     <EditText
-        android:id="@+id/Birthday"
+        android:id="@+id/CC"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/BirthdayLabel"
@@ -94,9 +87,8 @@
         android:textColor="#000000"
         android:textStyle="bold"
         android:background="#FFFFFF"
-        android:focusable="false"/> <!-- Set focusable to false to prevent keyboard from showing -->
+        android:focusable="false"/>
 
-    <!-- Gender Label -->
     <TextView
         android:id="@+id/GenderLabel"
         android:layout_width="wrap_content"
@@ -108,7 +100,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Gender Spinner -->
+
     <Spinner
         android:id="@+id/Gender"
         android:layout_width="match_parent"
@@ -118,7 +110,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"/>
 
-    <!-- Pet Type Label -->
+
     <TextView
         android:id="@+id/PetTypeLabel"
         android:layout_width="wrap_content"
@@ -130,7 +122,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
 
-    <!-- Pet Type Spinner -->
+
     <Spinner
         android:id="@+id/PetType"
         android:layout_width="match_parent"
@@ -139,8 +131,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="2dp"
         android:layout_marginTop="2dp"/>
-
-    <!-- Add Pet Button -->
 
     <Button
         android:id="@+id/Signup"
@@ -155,24 +145,182 @@
 
     <Button
         android:id="@+id/uploadImageButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/petImageView"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
         android:text="Upload Pet Photo" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="48dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/left"
-        app:tint="#4A3B2C" />
+        -->
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        android:layout_marginTop="100dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/go_back_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:rippleColor="#EDD1A7"
+            android:layout_marginStart="20dp"
+            android:backgroundTint="@color/white"
+            app:fabCustomSize="40dp"
+            android:contentDescription="Go back"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/petImageView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/image_placeholder"
+                    android:contentDescription="Pet Image" />
+
+                <Button
+                    android:id="@+id/uploadImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/petImageView"
+                    android:layout_gravity="center"
+                    android:text="Upload"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_below="@id/imageButton">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Pet's Name">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/PetName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="12dp"
+                                    android:textColor="@color/textColor" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Breed"
+                                android:layout_marginTop="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/Breed"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="12dp"
+                                    android:textColor="@color/textColor"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Birthday"
+                                android:layout_marginTop="10dp">
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/Birthday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="12dp"
+                                    android:textColor="@color/textColor" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/GenderLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Gender"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="10dp"/>
+
+
+                            <Spinner
+                                android:id="@+id/Gender"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:layout_marginTop="8dp"/>
+
+                            <TextView
+                                android:id="@+id/PetTypeLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pet Type"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="10dp"/>
+
+
+                            <Spinner
+                                android:id="@+id/PetType"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="2dp"
+                                android:layout_marginTop="2dp"/>
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/Signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Save"
+                        android:background="@drawable/button_ripple_effect"
+                        android:textColor="#986327"
+                        android:padding="12dp"
+                        android:layout_marginTop="20dp"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="50dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
