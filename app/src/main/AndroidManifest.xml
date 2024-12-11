@@ -18,6 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pawsitively"
         tools:targetApi="31">
+        <activity
+            android:name=".ScanPet"
+            android:exported="false" />
+        <activity
+            android:name=".AddLostPet"
+            android:exported="false" />
+        <activity
+            android:name=".PetFoundDashboard"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

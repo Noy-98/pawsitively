@@ -31,6 +31,395 @@
             android:contentDescription="Go back"/>
 
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageButton">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terms &amp; Conditions"
+                    android:textSize="24sp"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:layout_gravity="center" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Effective Date: 12/12/2024"
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Welcome to the Smart Pet Guardian App (“Pawsitively”). By using our services, you agree to comply with and be bound by the following terms and conditions. Please read them carefully before using the App."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1. Acceptance of Terms"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="By accessing or using the App, you agree to these terms and conditions. If you do not agree with any part, you may not use the App."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2. User Responsibilities"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.1. Account Information:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Users must provide accurate and up-to-date information when creating accounts or adding pet profiles."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.2. Device Usage:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ensure NFC/RFID tags and GPS collars are used responsibly and according to the manufacturer's guidelines.
+
+Regularly check device functionality to ensure accurate tracking and identification."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2.3. Legal Compliance:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Users are responsible for ensuring their use of the App complies with all applicable local laws."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3. Privacy Policy"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your personal information and pet data will be handled in accordance with our Privacy Policy. By using the App, you consent to the collection, storage, and usage of your data as outlined in the Privacy Policy."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.1. GPS Accuracy:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GPS tracking may vary depending on network coverage, device functionality, and environmental conditions."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.2. NFC/RFID Tags:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NFC/RFID tag functionality depends on proper usage and device compatibility."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.3. Third-Party Services:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="The App may integrate with third-party services. We are not responsible for their performance or terms."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5. Liability"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5.1. No Guarantee:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="The App is provided 'as-is' without any warranties regarding uninterrupted or error-free operation."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5.2. User Responsibility:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Users are solely responsible for monitoring their pets and taking appropriate actions in emergencies."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5.3. Data Loss or Misuse:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="We are not liable for any data loss or misuse resulting from unauthorized access to your account."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="6. Prohibited Activities"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Users may not:
+
+Misuse the App for illegal purposes.
+
+Tamper with NFC/RFID tags or GPS devices.
+
+Share false or misleading information."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7. Termination"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="We reserve the right to terminate or suspend access to the App if you violate these terms."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="8. Changes to Terms"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="We may update these terms at any time. Users will be notified of changes, and continued use of the App constitutes acceptance of the updated terms."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="9. Governing Law"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="These terms shall be governed by and interpreted in accordance with the laws of [Your Country/State]."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10. Contact Us"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="For questions or concerns about these terms, contact us at:
+Email: support@smartpetguardian.com
+Phone: [Insert Phone Number]"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="By using the Smart Pet Guardian App, you acknowledge that you have read, understood, and agreed to these terms and conditions."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

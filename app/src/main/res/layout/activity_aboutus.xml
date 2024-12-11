@@ -30,7 +30,175 @@
             app:fabCustomSize="40dp"
             android:contentDescription="Go back"/>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageButton">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About the App"
+                    android:textSize="24sp"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:layout_gravity="center" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Welcome to the Smart Pet Guardian App!
+The ultimate solution for modern pet care, combining NFC/RFID collar technology and GPS tracking to keep your furry friends safe and always within reach."
+                            android:textSize="15sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Key Features:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1. NFC/RFID Pet Collar Integration
+
+Easily scan your pet’s collar to access important information, including their name, breed, age, medical history, and emergency contacts.
+
+Perfect for quick identification in case your pet gets lost or needs assistance."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2. Real-Time GPS Tracking
+
+Monitor your pet’s location in real-time with precise GPS technology.
+
+Set up virtual boundaries and receive alerts if your pet wanders too far from home."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3. Pet Management
+
+Keep all your pet's information in one place, including vaccination records, vet appointments, and feeding schedules.
+
+Add multiple pets and manage their individual profiles seamlessly."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4. Lost &amp; Found Assistance
+
+Connect with a community of pet lovers to help find missing pets.
+
+Enable notifications for nearby users when a lost pet is scanned."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5. Activity Tracking
+
+Track your pet’s daily activities, steps, and overall health.
+
+Get insights into their exercise routines to ensure they stay active and healthy."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="6. User-Friendly Design
+
+Intuitive interface for both pet owners and finders.
+
+Lightweight and fast for easy use anywhere, anytime."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Why Choose Us?"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="At Smart Pet Guardian, we prioritize the safety and well-being of your pets. Our innovative technology ensures you always stay connected to your pets, providing peace of mind and enhancing your bond with them."
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your pet’s safety is our priority!"
+                            android:textSize="15sp"
+                            android:layout_marginTop="20dp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
