@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -67,11 +68,30 @@ public class CommunityChatActivity extends AppCompatActivity {
         communityChatRef = FirebaseDatabase.getInstance().getReference().child("community_chats");
         userRef = FirebaseDatabase.getInstance().getReference().child("users");
 
+        showCommunityChatDialog();
         loadCommunityMessages();
 
         go_back_bttn.setOnClickListener(view -> startActivity(new Intent(CommunityChatActivity.this, HomeDashboard.class)));
 
         sendButton.setOnClickListener(v -> sendMessage());
+    }
+
+    private void showCommunityChatDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Chat on Community?")
+                .setMessage("Would you like to chat on the community?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // Stay in the CommunityChatActivity
+                    dialog.dismiss();
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // Navigate to PersonalChatActivity
+                    Intent intent = new Intent(CommunityChatActivity.this, PersonalChatActivity.class);
+                    startActivity(intent);
+                    finish(); // Close the current activity
+                })
+                .setCancelable(false) // Prevent dialog from being dismissed without user input
+                .show();
     }
 
     private void loadCommunityMessages() {
