@@ -60,6 +60,11 @@ dependencies {
         implementation ("de.hdodenhof:circleimageview:3.1.0")
         implementation("androidx.appcompat:appcompat:1.6.1")
         implementation("androidx.core:core-ktx:1.12.0")
+        // ZXing core library for QR code generation
+        implementation("com.google.zxing:core:3.4.1")
+
+        // JourneyApps library for easier QR code creation
+        implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
         // Testing dependencies
         testImplementation(libs.junit)
