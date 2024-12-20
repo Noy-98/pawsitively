@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
@@ -130,16 +131,40 @@ public class AddLostPet extends AppCompatActivity {
             return;
         }
 
-            String petId = databaseReference.child("Pets").push().getKey();
+        // Generate a unique pet ID
+        String petId = databaseReference.child("Pets").push().getKey();
 
-            AddLostPet.Pets newPet = new AddLostPet.Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType);
+        // Create a new pet object
+        Pets newPet = new Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType);
 
+        if ("RFID Tag".equals(tagType)) {
+            // Show alert dialog and save after it is closed
+            showRFIDAlertDialog(() -> savePetDataToFirebase(petId, newPet, tagType));
+        } else {
+            // Directly save for other tag types
+            savePetDataToFirebase(petId, newPet, tagType);
+        }
+    }
+
+    private void showRFIDAlertDialog(Runnable onDialogClosed) {
+        new AlertDialog.Builder(this)
+                .setTitle("RFID/NFC Tag")
+                .setMessage("If you scan RFID/NFC tag, use the hardware scanner on the pet.")
+                .setPositiveButton("Close", (dialog, which) -> {
+                    dialog.dismiss();
+                    onDialogClosed.run(); // Execute the logic after the dialog is dismissed
+                })
+                .show();
+    }
+
+    private void savePetDataToFirebase(String petId, Pets newPet, String tagType) {
         databaseReference.child("Pets").child(petId).setValue(newPet)
                 .addOnSuccessListener(aVoid -> {
                     uploadImageToFirebase(petId);
                     if ("QR Code".equals(tagType)) {
-                        generateAndSaveQRCode(petId);
+                        generateAndSaveQRCode(petId); // Generate QR Code if selected
                     }
+                    Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(AddLostPet.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
