@@ -48,10 +48,10 @@ public class PrivateMessageAdapter extends android.widget.ArrayAdapter<Community
             // Align messages
             String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             if (chatItem.getSenderId().equals(currentUserId)) {
-                chatItemLayout.setGravity(View.TEXT_ALIGNMENT_VIEW_END); // Right-align for sent messages
+                chatItemLayout.setGravity(View.TEXT_ALIGNMENT_VIEW_START); // Right-align for sent messages
                 messageText.setBackgroundResource(R.drawable.message_background_sender); // Customize sender background
             } else {
-                chatItemLayout.setGravity(View.TEXT_ALIGNMENT_VIEW_START); // Left-align for received messages
+                chatItemLayout.setGravity(View.TEXT_ALIGNMENT_VIEW_END); // Left-align for received messages
                 messageText.setBackgroundResource(R.drawable.message_background_receiver); // Customize receiver background
             }
         }

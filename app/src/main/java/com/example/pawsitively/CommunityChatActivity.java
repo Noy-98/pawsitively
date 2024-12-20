@@ -86,7 +86,7 @@ public class CommunityChatActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("No", (dialog, which) -> {
                     // Navigate to PersonalChatActivity
-                    Intent intent = new Intent(CommunityChatActivity.this, PersonalChatActivity.class);
+                    Intent intent = new Intent(CommunityChatActivity.this, PersonalChatListActivity.class);
                     startActivity(intent);
                     finish(); // Close the current activity
                 })
