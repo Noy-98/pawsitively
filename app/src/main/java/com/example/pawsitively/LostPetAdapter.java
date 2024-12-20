@@ -48,6 +48,8 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
         holder.petDateLostTextView.setText("Date Lost: " + pet.dateLost);
         holder.petDescriptionTextView.setText("Description: " + pet.description);
         holder.petGenderTextView.setText("Gender: " + pet.gender);
+        holder.petTypeTextView.setText("Pet Type: " + pet.type);
+        holder.tagTypeTextView.setText("Tag Type: " + pet.tagType);
 
         // Load pet image using Glide
         Glide.with(holder.petImageView.getContext())
@@ -55,6 +57,12 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
                 .placeholder(R.drawable.default_pet_image) // Placeholder while loading
                 .error(R.drawable.default_pet_image) // Error image if loading fails
                 .into(holder.petImageView);
+
+        Glide.with(holder.tagTypeView.getContext())
+                .load(pet.vaccineUrl) // imageUrl from the database
+                .placeholder(R.drawable.default_pet_image) // Placeholder while loading
+                .error(R.drawable.default_pet_image) // Error image if loading fails
+                .into(holder.tagTypeView);
     }
 
     @Override
@@ -63,8 +71,9 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
     }
 
     public static class PetViewHolder extends RecyclerView.ViewHolder {
-        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView, petDateLostTextView, petDescriptionTextView;
+        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView, petDateLostTextView, petDescriptionTextView, petTypeTextView, tagTypeTextView;
         CircleImageView petImageView; // Changed to CircleImageView
+        ImageView tagTypeView;
 
         public PetViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,7 +83,10 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
             petDateLostTextView = itemView.findViewById(R.id.petDateLostTextView);
             petDescriptionTextView = itemView.findViewById(R.id.petDescriptionTextView);
             petGenderTextView = itemView.findViewById(R.id.petGenderTextView);
+            petTypeTextView = itemView.findViewById(R.id.petTypeTextView);
+            tagTypeTextView = itemView.findViewById(R.id.tagTypeTextView);
             petImageView = itemView.findViewById(R.id.petImageView); // Ensure this matches the CircleImageView in the layout
+            tagTypeView = itemView.findViewById(R.id.tagTypeView);
         }
     }
 }

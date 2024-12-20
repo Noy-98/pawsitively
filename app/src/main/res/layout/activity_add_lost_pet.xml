@@ -174,7 +174,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Upload" />
+                                    android:text="Upload"
+                                    android:layout_marginStart="10dp"/>
                             </LinearLayout>
 
                             <TextView

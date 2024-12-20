@@ -12,8 +12,8 @@
     <!-- Pet Image -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/petImageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/default_pet_image"
         android:scaleType="centerCrop" />
@@ -81,5 +81,28 @@
             android:text="Gender: Male"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/petTypeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet Type: Dog"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/tagTypeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tag Type: QR Code"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/tagTypeView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/default_pet_image"/>
     </LinearLayout>
 </LinearLayout>

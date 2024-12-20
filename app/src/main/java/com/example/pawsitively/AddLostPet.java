@@ -28,7 +28,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Calendar;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Environment;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 public class AddLostPet extends AppCompatActivity {
 
@@ -36,14 +47,14 @@ public class AddLostPet extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_CODE = 2;
 
     private TextInputEditText petNameEditText, breedEditText, birthdayEditText, dateLostEditText, descriptionEditText;
-    private Spinner genderSpinner, petTypeSpinner;
-    private Button uploadImageButton;
+    private Spinner genderSpinner, petTypeSpinner, tagTypeSpinner;
+    private Button uploadImageButton, uploadImageButton2;
 
     private AppCompatButton addPetButton;
-    private ImageView petImageView;
+    private CircleImageView petImageView, vaccineImage;
     private FloatingActionButton backButton;
 
-    private Uri petImageUri;
+    private Uri petImageUri, vaccineImageUri;
 
     private DatabaseReference databaseReference;
 
@@ -71,20 +82,31 @@ public class AddLostPet extends AppCompatActivity {
         descriptionEditText = findViewById(R.id.description);
         genderSpinner = findViewById(R.id.Gender);
         petTypeSpinner = findViewById(R.id.PetType);
+        tagTypeSpinner = findViewById(R.id.typeTag);
         addPetButton = findViewById(R.id.Signup);
         backButton = findViewById(R.id.go_back_bttn);
         uploadImageButton = findViewById(R.id.uploadImageButton);
+        uploadImageButton2 = findViewById(R.id.uploadImageButton2);
         petImageView = findViewById(R.id.petImageView);
+        vaccineImage = findViewById(R.id.vaccineImage);
 
         setupSpinners();
 
-        birthdayEditText.setOnClickListener(v -> showDatePickerDialog());
-        dateLostEditText.setOnClickListener(v -> showDatePickerDialog2());
+        birthdayEditText.setOnClickListener(v -> showDatePickerDialog(birthdayEditText));
+        dateLostEditText.setOnClickListener(v -> showDatePickerDialog2(dateLostEditText));
         uploadImageButton.setOnClickListener(v -> openImageChooser());
+        uploadImageButton2.setOnClickListener(v -> openImageChooser2());
         addPetButton.setOnClickListener(v -> addPet());
         backButton.setOnClickListener(view -> startActivity(new Intent(AddLostPet.this, PetFoundDashboard.class)));
 
         checkStoragePermission();
+    }
+
+    private void openImageChooser2() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Vaccine Image"), PICK_IMAGE_REQUEST + 1);
     }
 
     private void checkStoragePermission() {
@@ -101,44 +123,103 @@ public class AddLostPet extends AppCompatActivity {
         String description = descriptionEditText.getText().toString().trim();
         String gender = genderSpinner.getSelectedItem().toString();
         String petType = petTypeSpinner.getSelectedItem().toString();
+        String tagType = tagTypeSpinner.getSelectedItem().toString();
 
-        if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || dateLost.isEmpty() || description.isEmpty() || petImageUri == null) {
+        if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || dateLost.isEmpty() || description.isEmpty() || petImageUri == null || vaccineImageUri == null) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             return;
         }
 
             String petId = databaseReference.child("Pets").push().getKey();
 
-            AddLostPet.Pets newPet = new AddLostPet.Pets(petId, petName, breed, birthday, dateLost, description, gender, petType);
+            AddLostPet.Pets newPet = new AddLostPet.Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType);
 
-            databaseReference.child("Pets").child(petId).setValue(newPet)
-                    .addOnSuccessListener(aVoid -> uploadImageToFirebase(petId))
-                    .addOnFailureListener(e -> Toast.makeText(AddLostPet.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        databaseReference.child("Pets").child(petId).setValue(newPet)
+                .addOnSuccessListener(aVoid -> {
+                    uploadImageToFirebase(petId);
+                    if ("QR Code".equals(tagType)) {
+                        generateAndSaveQRCode(petId);
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(AddLostPet.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    private void generateAndSaveQRCode(String petId) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            int qrCodeSize = 500;
+            Bitmap bitmap = Bitmap.createBitmap(qrCodeSize, qrCodeSize, Bitmap.Config.RGB_565);
+            com.google.zxing.common.BitMatrix bitMatrix = qrCodeWriter.encode(petId, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize);
+
+            for (int x = 0; x < qrCodeSize; x++) {
+                for (int y = 0; y < qrCodeSize; y++) {
+                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+
+            saveQRCodeToStorage(bitmap, petId);
+
+        } catch (WriterException e) {
+            Toast.makeText(this, "Error generating QR Code: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveQRCodeToStorage(Bitmap bitmap, String petId) {
+        String picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        File qrCodeFile = new File(picturesDir, "QRCode_" + petId + ".png");
+
+        try (FileOutputStream out = new FileOutputStream(qrCodeFile)) {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            Toast.makeText(this, "QR Code saved to " + qrCodeFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error saving QR Code: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void uploadImageToFirebase(String petId) {
         if (petImageUri != null) {
-            StorageReference fileReference = storageReference.child(petId + ".jpg");
+            StorageReference petImageReference = storageReference.child(petId + "_pet.jpg");
 
-            fileReference.putFile(petImageUri)
+            petImageReference.putFile(petImageUri)
                     .addOnSuccessListener(taskSnapshot -> {
-                        fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        petImageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                             databaseReference
                                     .child("Pets").child(petId).child("imageUrl").setValue(uri.toString())
                                     .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(AddLostPet.this, "Pet and image added successfully!", Toast.LENGTH_SHORT).show();
-                                        clearFields();
+                                        Toast.makeText(AddLostPet.this, "Pet image uploaded successfully!", Toast.LENGTH_SHORT).show();
                                     })
                                     .addOnFailureListener(e -> {
-                                        Toast.makeText(AddLostPet.this, "Failed to save image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(AddLostPet.this, "Failed to save pet image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         });
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(AddLostPet.this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddLostPet.this, "Pet image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
+
+        if (vaccineImageUri != null) {
+            StorageReference vaccineImageReference = storageReference.child(petId + "_vaccine.jpg");
+
+            vaccineImageReference.putFile(vaccineImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        vaccineImageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            databaseReference
+                                    .child("Pets").child(petId).child("vaccineUrl").setValue(uri.toString())
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(AddLostPet.this, "Vaccine image uploaded successfully!", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(AddLostPet.this, "Failed to save vaccine image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(AddLostPet.this, "Vaccine image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         }
     }
+
 
     private void clearFields() {
         petNameEditText.setText("");
@@ -148,8 +229,11 @@ public class AddLostPet extends AppCompatActivity {
         descriptionEditText.setText("");
         genderSpinner.setSelection(0);
         petTypeSpinner.setSelection(0);
+        tagTypeSpinner.setSelection(0);
         petImageView.setImageResource(0);
+        vaccineImage.setImageResource(0);
         petImageUri = null;
+        vaccineImageUri = null;
         addPetButton.setEnabled(true);
     }
 
@@ -163,13 +247,22 @@ public class AddLostPet extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            petImageUri = data.getData();
-            petImageView.setImageURI(petImageUri);
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+
+            if (requestCode == PICK_IMAGE_REQUEST) {
+                // For pet image upload
+                petImageUri = selectedImageUri;
+                petImageView.setImageURI(petImageUri);
+            } else if (requestCode == PICK_IMAGE_REQUEST + 1) {
+                // For vaccine image upload
+                vaccineImageUri = selectedImageUri;
+                vaccineImage.setImageURI(vaccineImageUri);
+            }
         }
     }
 
-    private void showDatePickerDialog2() {
+    private void showDatePickerDialog(TextInputEditText birthdayEditText) {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
@@ -179,15 +272,16 @@ public class AddLostPet extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void showDatePickerDialog() {
+    private void showDatePickerDialog2(TextInputEditText dateLostEditText) {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
-                (view, year, month, day) -> birthdayEditText.setText(day + "/" + (month + 1) + "/" + year),
+                (view, year, month, day) -> dateLostEditText.setText(day + "/" + (month + 1) + "/" + year),
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
         );
         datePickerDialog.show();
     }
+
 
     private void setupSpinners() {
         ArrayAdapter<String> petTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Dog", "Cat"});
@@ -197,15 +291,19 @@ public class AddLostPet extends AppCompatActivity {
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Male", "Female"});
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSpinner.setAdapter(genderAdapter);
+
+        ArrayAdapter<String> tagTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"QR Code", "RFID Tag"});
+        tagTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tagTypeSpinner.setAdapter(tagTypeAdapter);
     }
 
     public static class Pets {
         public String petId;
-        public String name, breed, birthday, dateLost, description, gender, type, imageUrl;
+        public String name, breed, birthday, dateLost, description, gender, type, tagType, imageUrl, vaccineUrl;
 
         public Pets() {}
 
-        public Pets(String petId, String name, String breed, String birthday, String dateLost, String description,String gender, String type) {
+        public Pets(String petId, String name, String breed, String birthday, String dateLost, String description,String gender, String type, String tagType) {
             this.petId = petId;
             this.name = name;
             this.breed = breed;
@@ -214,6 +312,7 @@ public class AddLostPet extends AppCompatActivity {
             this.description = description;
             this.gender = gender;
             this.type = type;
+            this.tagType = tagType;
         }
     }
 }
