@@ -183,10 +183,21 @@ public class ScanPet extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // QR Code matches a petId
-                    Intent intent = new Intent(ScanPet.this, PetFoundDashboard.class);
-                    intent.putExtra("petId", qrCodeValue);
-                    startActivity(intent);
+                    // Copy data to ScannedQRCode table
+                    for (DataSnapshot petSnapshot : dataSnapshot.getChildren()) {
+                        DatabaseReference scannedQrCodeRef = FirebaseDatabase.getInstance().getReference("ScannedList");
+                        scannedQrCodeRef.child(petSnapshot.getKey()).setValue(petSnapshot.getValue())
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(ScanPet.this, "Data copied to ScannedQRCode successfully!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(ScanPet.this, PetFoundDashboard.class);
+                                        intent.putExtra("petId", qrCodeValue);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(ScanPet.this, "Failed to copy data: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
                 } else {
                     // QR Code does not match
                     Toast.makeText(ScanPet.this, "QR Code not registered!", Toast.LENGTH_SHORT).show();
@@ -199,6 +210,7 @@ public class ScanPet extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onDestroy() {

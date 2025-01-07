@@ -12,8 +12,8 @@
     <!-- Pet Image -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/petImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/default_pet_image"
         android:scaleType="centerCrop" />
@@ -97,6 +97,16 @@
             android:text="Tag Type: QR Code"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/tagId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tag ID: 331ACFB6"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:visibility="gone"/>
+
 
         <ImageView
             android:id="@+id/tagTypeView"

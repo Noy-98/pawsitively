@@ -51,6 +51,15 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
         holder.petTypeTextView.setText("Pet Type: " + pet.type);
         holder.tagTypeTextView.setText("Tag Type: " + pet.tagType);
 
+        // Show tagId if tagType is "RFID Tag"
+        if ("RFID Tag".equalsIgnoreCase(pet.tagType)) {
+            holder.tagId.setVisibility(View.VISIBLE);
+            holder.tagId.setText("Tag ID: " + pet.tagId); // Ensure `tagId` exists in your data model
+        } else {
+            holder.tagId.setVisibility(View.GONE);
+        }
+
+
         // Load pet image using Glide
         Glide.with(holder.petImageView.getContext())
                 .load(pet.imageUrl) // imageUrl from the database
@@ -71,7 +80,7 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
     }
 
     public static class PetViewHolder extends RecyclerView.ViewHolder {
-        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView, petDateLostTextView, petDescriptionTextView, petTypeTextView, tagTypeTextView;
+        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView, petDateLostTextView, petDescriptionTextView, petTypeTextView, tagTypeTextView, tagId;
         CircleImageView petImageView; // Changed to CircleImageView
         ImageView tagTypeView;
 
@@ -87,6 +96,7 @@ public class LostPetAdapter extends RecyclerView.Adapter<LostPetAdapter.PetViewH
             tagTypeTextView = itemView.findViewById(R.id.tagTypeTextView);
             petImageView = itemView.findViewById(R.id.petImageView); // Ensure this matches the CircleImageView in the layout
             tagTypeView = itemView.findViewById(R.id.tagTypeView);
+            tagId = itemView.findViewById(R.id.tagId);
         }
     }
 }

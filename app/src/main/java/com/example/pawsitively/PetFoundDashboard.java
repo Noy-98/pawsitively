@@ -46,47 +46,43 @@ public class PetFoundDashboard extends AppCompatActivity {
             return insets;
         });
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Lost&Found").child("Pets");
-
-        // Get the petId passed from the ScanPet activity
-        petId = getIntent().getStringExtra("petId");
+        databaseReference = FirebaseDatabase.getInstance().getReference("ScannedList");
 
         petRecyclerView = findViewById(R.id.petRecyclerView);
         petRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         petList = new ArrayList<>();
         lostPetAdapter = new LostPetAdapter(petList, this);
         petRecyclerView.setAdapter(lostPetAdapter);
+
+
         backButton = findViewById(R.id.go_back_bttn);
 
-        if (petId != null) {
-            loadPets(petId);  // Load data for the specific petId
-        }
+        // Load pets data in real-time
+        loadPetsInRealtime();
         initializeNavigationButtons();
 
         backButton.setOnClickListener(view -> startActivity(new Intent(PetFoundDashboard.this, HomeDashboard.class)));
     }
 
-    private void loadPets(String petId) {
-        // Fetch only the pet that matches the petId
-        databaseReference.child(petId).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void loadPetsInRealtime() {
+        // Listen for real-time updates from the ScannedQRCode table
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    AddLostPet.Pets pet = dataSnapshot.getValue(AddLostPet.Pets.class);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                petList.clear(); // Clear the current list
+                for (DataSnapshot petSnapshot : snapshot.getChildren()) {
+                    AddLostPet.Pets pet = petSnapshot.getValue(AddLostPet.Pets.class);
                     if (pet != null) {
-                        pet.petId = petId;  // Set the petId to ensure it's passed along
-                        petList.clear();
-                        petList.add(pet);
-                        lostPetAdapter.notifyDataSetChanged();  // Update the RecyclerView
+                        pet.petId = petSnapshot.getKey(); // Assign petId from key
+                        petList.add(pet); // Add pet to the list
                     }
-                } else {
-                    Toast.makeText(PetFoundDashboard.this, "Pet not found!", Toast.LENGTH_SHORT).show();
                 }
+                lostPetAdapter.notifyDataSetChanged(); // Update the RecyclerView
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(PetFoundDashboard.this, "Failed to load pet data: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(PetFoundDashboard.this, "Failed to load pet data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
