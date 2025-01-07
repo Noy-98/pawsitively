@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,7 +32,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -117,6 +120,9 @@ public class AddLostPet extends AppCompatActivity {
     }
 
     private void addPet() {
+        // Disable the button to prevent duplicate submissions
+        addPetButton.setEnabled(false);
+
         String petName = petNameEditText.getText().toString().trim();
         String breed = breedEditText.getText().toString().trim();
         String birthday = birthdayEditText.getText().toString().trim();
@@ -128,46 +134,77 @@ public class AddLostPet extends AppCompatActivity {
 
         if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || dateLost.isEmpty() || description.isEmpty() || petImageUri == null || vaccineImageUri == null) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            addPetButton.setEnabled(true); // Re-enable the button if validation fails
             return;
         }
 
         // Generate a unique pet ID
         String petId = databaseReference.child("Pets").push().getKey();
 
-        // Create a new pet object
-        Pets newPet = new Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType);
-
         if ("RFID Tag".equals(tagType)) {
-            // Show alert dialog and save after it is closed
-            showRFIDAlertDialog(() -> savePetDataToFirebase(petId, newPet, tagType));
+            // Show RFID Alert Dialog and save the selected key/tagId
+            showRFIDAlertDialog(selectedTagId -> {
+                Pets newPet = new Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType, selectedTagId);
+                savePetDataToFirebase(petId, newPet, tagType);
+            });
         } else {
-            // Directly save for other tag types
+            // Default tagId to null for other tag types
+            Pets newPet = new Pets(petId, petName, breed, birthday, dateLost, description, gender, petType, tagType, null);
             savePetDataToFirebase(petId, newPet, tagType);
         }
     }
 
-    private void showRFIDAlertDialog(Runnable onDialogClosed) {
-        new AlertDialog.Builder(this)
-                .setTitle("RFID/NFC Tag")
-                .setMessage("If you scan RFID/NFC tag, use the hardware scanner on the pet.")
-                .setPositiveButton("Close", (dialog, which) -> {
-                    dialog.dismiss();
-                    onDialogClosed.run(); // Execute the logic after the dialog is dismissed
-                })
-                .show();
+
+
+    private void showRFIDAlertDialog(OnTagIdSelectedListener listener) {
+        DatabaseReference tagsReference = FirebaseDatabase.getInstance().getReference("GeneratedTags");
+        tagsReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                List<String> keys = new ArrayList<>();
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                    keys.add(snapshot.getKey());
+                }
+
+                // Show the keys in a dialog
+                String[] keysArray = keys.toArray(new String[0]);
+                new AlertDialog.Builder(this)
+                        .setTitle("Select RFID Tag")
+                        .setItems(keysArray, (dialog, which) -> {
+                            String selectedTagId = keysArray[which];
+                            listener.onTagIdSelected(selectedTagId); // Pass selected key back
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
+            } else {
+                Toast.makeText(this, "Failed to load tags", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Callback interface for handling tagId selection
+    private interface OnTagIdSelectedListener {
+        void onTagIdSelected(String tagId);
     }
 
     private void savePetDataToFirebase(String petId, Pets newPet, String tagType) {
-        databaseReference.child("Pets").child(petId).setValue(newPet)
-                .addOnSuccessListener(aVoid -> {
-                    uploadImageToFirebase(petId);
-                    if ("QR Code".equals(tagType)) {
-                        generateAndSaveQRCode(petId); // Generate QR Code if selected
-                    }
-                    Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> Toast.makeText(AddLostPet.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        databaseReference.child("Pets").child(petId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                Toast.makeText(this, "Pet already exists in database!", Toast.LENGTH_SHORT).show();
+            } else {
+                databaseReference.child("Pets").child(petId).setValue(newPet)
+                        .addOnSuccessListener(aVoid -> {
+                            uploadImageToFirebase(petId);
+                            if ("QR Code".equals(tagType)) {
+                                generateAndSaveQRCode(petId);
+                            }
+                            Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show();
+                            clearFields();
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(AddLostPet.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        });
     }
+
 
     private void generateAndSaveQRCode(String petId) {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -325,10 +362,11 @@ public class AddLostPet extends AppCompatActivity {
     public static class Pets {
         public String petId;
         public String name, breed, birthday, dateLost, description, gender, type, tagType, imageUrl, vaccineUrl;
+        public String tagId; // Added tagId field
 
         public Pets() {}
 
-        public Pets(String petId, String name, String breed, String birthday, String dateLost, String description,String gender, String type, String tagType) {
+        public Pets(String petId, String name, String breed, String birthday, String dateLost, String description,String gender, String type, String tagType, String tagId) {
             this.petId = petId;
             this.name = name;
             this.breed = breed;
@@ -338,6 +376,7 @@ public class AddLostPet extends AppCompatActivity {
             this.gender = gender;
             this.type = type;
             this.tagType = tagType;
+            this.tagId = tagId; // Initialize tagId
         }
     }
 }
