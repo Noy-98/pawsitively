@@ -133,13 +133,23 @@ public class ManagePets extends AppCompatActivity {
 
             Pet newPet = new Pet(petId, petName, breed, birthday, gender, petType);
 
+            // Save pet data to user-specific table
             databaseReference.child(userId).child("pets").child(petId).setValue(newPet)
-                    .addOnSuccessListener(aVoid -> uploadImageToFirebase(petId))
+                    .addOnSuccessListener(aVoid -> {
+                        // Save pet data to global "Pets" table
+                        FirebaseDatabase.getInstance().getReference("Pets")
+                                .child(petId)
+                                .setValue(newPet)
+                                .addOnSuccessListener(globalVoid -> {
+                                    uploadImageToFirebase(petId);
+                                })
+                                .addOnFailureListener(globalError -> {
+                                    Toast.makeText(ManagePets.this, "Failed to add pet globally: " + globalError.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    })
                     .addOnFailureListener(e -> Toast.makeText(ManagePets.this, "Failed to add pet: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         }
     }
-
-
 
     private void uploadImageToFirebase(String petId) {
         if (petImageUri != null) {
@@ -148,11 +158,22 @@ public class ManagePets extends AppCompatActivity {
             fileReference.putFile(petImageUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String imageUrl = uri.toString();
+
+                            // Update user-specific table with imageUrl
                             databaseReference.child(firebaseAuth.getCurrentUser().getUid())
-                                    .child("pets").child(petId).child("imageUrl").setValue(uri.toString())
+                                    .child("pets").child(petId).child("imageUrl").setValue(imageUrl)
                                     .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(ManagePets.this, "Pet and image added successfully!", Toast.LENGTH_SHORT).show();
-                                        clearFields();
+                                        // Update global "Pets" table with imageUrl
+                                        FirebaseDatabase.getInstance().getReference("Pets")
+                                                .child(petId).child("imageUrl").setValue(imageUrl)
+                                                .addOnSuccessListener(globalVoid -> {
+                                                    Toast.makeText(ManagePets.this, "Pet and image added successfully!", Toast.LENGTH_SHORT).show();
+                                                    clearFields();
+                                                })
+                                                .addOnFailureListener(globalError -> {
+                                                    Toast.makeText(ManagePets.this, "Failed to update global image URL: " + globalError.getMessage(), Toast.LENGTH_SHORT).show();
+                                                });
                                     })
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(ManagePets.this, "Failed to save image URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -164,6 +185,7 @@ public class ManagePets extends AppCompatActivity {
                     });
         }
     }
+
 
     private void clearFields() {
         petNameEditText.setText("");

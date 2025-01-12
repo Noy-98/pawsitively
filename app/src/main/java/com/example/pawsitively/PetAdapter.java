@@ -90,17 +90,29 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("pets");
 
+        DatabaseReference globalPetsRef = FirebaseDatabase.getInstance()
+                .getReference("Pets");
+
+        // Delete from user-specific pets table
         userPetsRef.child(petId).removeValue().addOnSuccessListener(aVoid -> {
-            // Remove the pet object directly from the list
-            if (position >= 0 && position < petList.size()) {
-                petList.remove(position);
-                notifyItemRemoved(position);
-                if (context != null) {
-                    Toast.makeText(context, "Pet deleted successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("PetAdapter", "Context is null, cannot show toast.");
+            // Delete from global pets table
+            globalPetsRef.child(petId).removeValue().addOnSuccessListener(globalVoid -> {
+                // Remove the pet object directly from the list
+                if (position >= 0 && position < petList.size()) {
+                    petList.remove(position);
+                    notifyItemRemoved(position);
+                    if (context != null) {
+                        Toast.makeText(context, "Pet deleted successfully!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("PetAdapter", "Context is null, cannot show toast.");
+                    }
                 }
-            }
+            }).addOnFailureListener(globalError -> {
+                Log.e("PetAdapter", "Failed to delete pet from global table: " + globalError.getMessage());
+                if (context != null) {
+                    Toast.makeText(context, "Failed to delete pet globally: " + globalError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }).addOnFailureListener(e -> {
             Log.e("PetAdapter", "Failed to delete pet: " + e.getMessage());
             if (context != null) {
@@ -108,5 +120,6 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             }
         });
     }
+
 
 }
