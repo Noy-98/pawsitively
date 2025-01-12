@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">pawsitively</string>
     <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="default_web_client_id">535315386372-7ur8fbqiu26tpm9gr2ngrjup91hgj1bp.apps.googleusercontent.com</string>
 </resources>

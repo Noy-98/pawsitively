@@ -89,7 +89,7 @@ public class Signup extends AppCompatActivity {
             if (task.isSuccessful()) {
                 // User registration successful
                 FirebaseUser user = auth.getCurrentUser();
-                saveUserData(user.getUid(), name, age, gender, contactNumber, address);
+                saveUserData(user.getUid(), email, name, age, gender, contactNumber, address);
                 Toast.makeText(Signup.this, "Registration successful", Toast.LENGTH_SHORT).show();
 
                 // Go back to MainActivity
@@ -103,15 +103,16 @@ public class Signup extends AppCompatActivity {
         });
     }
 
-    private void saveUserData(String userId, String name, String age, String gender, String contactNumber, String address) {
+    private void saveUserData(String userId, String email, String name, String age, String gender, String contactNumber, String address) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("users").child(userId);
-        User user = new User(name, age, gender, contactNumber, address);
+        User user = new User(email, name, age, gender, contactNumber, address);
         database.setValue(user);
     }
 
     // User class definition
     public static class User {
         private String name;
+        private String emailAdd;
         private String age;
         private String gender;
         private String contactNumber;
@@ -121,7 +122,8 @@ public class Signup extends AppCompatActivity {
         public User() {
         }
 
-        public User(String name, String age, String gender, String contactNumber, String address) {
+        public User(String email, String name, String age, String gender, String contactNumber, String address) {
+            this.emailAdd = email;
             this.name = name;
             this.age = age;
             this.gender = gender;
@@ -130,6 +132,13 @@ public class Signup extends AppCompatActivity {
         }
 
         // Getters and Setters
+        public String getEmail() {
+            return emailAdd;
+        }
+        public void setEmail(String email) {
+            this.emailAdd = email;
+        }
+
         public String getName() {
             return name;
         }
