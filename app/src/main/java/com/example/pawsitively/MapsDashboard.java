@@ -126,11 +126,11 @@ public class MapsDashboard extends AppCompatActivity implements OnMapReadyCallba
 
     private void verifyAndPinPetLocation(String petId) {
         // Verify if petId exists in petLocation
-        databaseReference.child("petLocation").child(petId).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("Pets").child(petId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot petLocationSnapshot) {
                 if (petLocationSnapshot.exists()) {
-                    String locTracker = petLocationSnapshot.child("locTracker").getValue(String.class);
+                    String locTracker = petLocationSnapshot.child("petLocation").getValue(String.class);
 
                     if (locTracker != null) {
                         LatLng coordinates = extractCoordinatesFromUrl(locTracker);
