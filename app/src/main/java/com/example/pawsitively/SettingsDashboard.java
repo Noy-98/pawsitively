@@ -77,11 +77,6 @@ public class SettingsDashboard extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MapsDashboard.class));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
-                } else if (item.getItemId() == R.id.notification) {
-                    startActivity(new Intent(getApplicationContext(), NotificationDashboard.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    finish();
-                    return true;
                 } else if (item.getItemId() == R.id.settings) {
                     return true;
                 }
