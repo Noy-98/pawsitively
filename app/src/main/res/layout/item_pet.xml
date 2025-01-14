@@ -63,6 +63,14 @@
             android:text="Gender: Male"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/petIdTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet ID: "
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
     </LinearLayout>
 
     <ImageView

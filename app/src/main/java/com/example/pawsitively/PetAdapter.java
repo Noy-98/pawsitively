@@ -46,6 +46,8 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
         holder.petBreedTextView.setText("Breed: " + pet.breed);
         holder.petBirthdayTextView.setText("Birthday: " + pet.birthday);
         holder.petGenderTextView.setText("Gender: " + pet.gender);
+        holder.petGenderTextView.setText("Gender: " + pet.gender);
+        holder.petIdTextView.setText("Pet ID: " + pet.petId);
 
         // Load pet image using Glide
         Glide.with(holder.petImageView.getContext())
@@ -69,7 +71,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
     }
 
     public static class PetViewHolder extends RecyclerView.ViewHolder {
-        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView;
+        TextView petNameTextView, petBreedTextView, petBirthdayTextView, petGenderTextView, petIdTextView;
         CircleImageView petImageView; // Changed to CircleImageView
         ImageView delete;
 
@@ -79,6 +81,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             petBreedTextView = itemView.findViewById(R.id.petBreedTextView);
             petBirthdayTextView = itemView.findViewById(R.id.petBirthdayTextView);
             petGenderTextView = itemView.findViewById(R.id.petGenderTextView);
+            petIdTextView = itemView.findViewById(R.id.petIdTextView);
             petImageView = itemView.findViewById(R.id.petImageView); // Ensure this matches the CircleImageView in the layout
             delete = itemView.findViewById(R.id.delete);
         }

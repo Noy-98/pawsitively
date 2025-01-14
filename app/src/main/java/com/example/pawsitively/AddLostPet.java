@@ -50,7 +50,7 @@ public class AddLostPet extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int STORAGE_PERMISSION_CODE = 2;
 
-    private TextInputEditText petNameEditText, breedEditText, birthdayEditText, dateLostEditText, descriptionEditText;
+    private TextInputEditText petNameEditText, breedEditText, birthdayEditText, dateLostEditText, descriptionEditText, petId;
     private Spinner genderSpinner, petTypeSpinner, tagTypeSpinner;
     private Button uploadImageButton, uploadImageButton2;
 
@@ -93,6 +93,7 @@ public class AddLostPet extends AppCompatActivity {
         uploadImageButton2 = findViewById(R.id.uploadImageButton2);
         petImageView = findViewById(R.id.petImageView);
         vaccineImage = findViewById(R.id.vaccineImage);
+        petId = findViewById(R.id.petId);
 
         setupSpinners();
 
@@ -128,18 +129,18 @@ public class AddLostPet extends AppCompatActivity {
         String birthday = birthdayEditText.getText().toString().trim();
         String dateLost = dateLostEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
+        String ptId = petId.getText().toString().trim();
         String gender = genderSpinner.getSelectedItem().toString();
         String petType = petTypeSpinner.getSelectedItem().toString();
         String tagType = tagTypeSpinner.getSelectedItem().toString();
 
-        if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || dateLost.isEmpty() || description.isEmpty() || petImageUri == null || vaccineImageUri == null) {
+        if (petName.isEmpty() || breed.isEmpty() || birthday.isEmpty() || dateLost.isEmpty() || description.isEmpty() || ptId.isEmpty() || petImageUri == null || vaccineImageUri == null) {
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
             addPetButton.setEnabled(true); // Re-enable the button if validation fails
             return;
         }
 
-        // Generate a unique pet ID
-        String petId = databaseReference.child("Pets").push().getKey();
+        String petId = ptId;
 
         if ("RFID Tag".equals(tagType)) {
             // Show RFID Alert Dialog and save the selected key/tagId
@@ -289,6 +290,7 @@ public class AddLostPet extends AppCompatActivity {
         birthdayEditText.setText("");
         dateLostEditText.setText("");
         descriptionEditText.setText("");
+        petId.setText("");
         genderSpinner.setSelection(0);
         petTypeSpinner.setSelection(0);
         tagTypeSpinner.setSelection(0);
