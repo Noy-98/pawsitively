@@ -65,27 +65,56 @@ public class PetFoundDashboard extends AppCompatActivity {
     }
 
     private void loadPetsInRealtime() {
-        // Listen for real-time updates from the ScannedQRCode table
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userPetsRef = FirebaseDatabase.getInstance().getReference("users").child(currentUserId).child("pets");
+
+        // Fetch user-specific pet IDs
+        userPetsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                petList.clear(); // Clear the current list
-                for (DataSnapshot petSnapshot : snapshot.getChildren()) {
-                    AddLostPet.Pets pet = petSnapshot.getValue(AddLostPet.Pets.class);
-                    if (pet != null) {
-                        pet.petId = petSnapshot.getKey(); // Assign petId from key
-                        petList.add(pet); // Add pet to the list
-                    }
+            public void onDataChange(@NonNull DataSnapshot userPetsSnapshot) {
+                List<String> userPetIds = new ArrayList<>();
+                for (DataSnapshot petSnapshot : userPetsSnapshot.getChildren()) {
+                    userPetIds.add(petSnapshot.getKey());
                 }
-                lostPetAdapter.notifyDataSetChanged(); // Update the RecyclerView
+
+                // Listen for real-time updates from ScannedList
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        petList.clear();
+                        boolean hasMatches = false;
+
+                        for (DataSnapshot petSnapshot : snapshot.getChildren()) {
+                            AddLostPet.Pets pet = petSnapshot.getValue(AddLostPet.Pets.class);
+                            if (pet != null && userPetIds.contains(pet.petId)) {
+                                pet.petId = petSnapshot.getKey();
+                                petList.add(pet);
+                                hasMatches = true;
+                            }
+                        }
+
+                        lostPetAdapter.notifyDataSetChanged();
+
+                        // Show toast if no matches found
+                        if (!hasMatches) {
+                            Toast.makeText(PetFoundDashboard.this, "No matching pets found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(PetFoundDashboard.this, "Failed to load pet data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(PetFoundDashboard.this, "Failed to load pet data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PetFoundDashboard.this, "Failed to load user pet data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void initializeNavigationButtons() {
         ImageView petsButton = findViewById(R.id.imageView2);
