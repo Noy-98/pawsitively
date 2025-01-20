@@ -28,8 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Objects;
-
 public class MapsDashboard extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -80,7 +78,51 @@ public class MapsDashboard extends AppCompatActivity implements OnMapReadyCallba
         Bundle mapViewBundle = savedInstanceState != null ? savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY) : null;
         mapView.onCreate(mapViewBundle);
         mapView.getMapAsync(this);
+
+        // Add listener for real-time gpsTrack updates
+        listenForGpsTrackUpdates();
     }
+
+    private void listenForGpsTrackUpdates() {
+        DatabaseReference gpsTrackRef = databaseReference.child("DeviceTracking").child("gpsTrack");
+
+        gpsTrackRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String updatedGpsTrack = snapshot.getValue(String.class);
+
+                    if (updatedGpsTrack != null) {
+                        updatePetsGpsTrack(updatedGpsTrack);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Failed to listen for gpsTrack updates: " + error.getMessage());
+            }
+        });
+    }
+
+    private void updatePetsGpsTrack(String newGpsTrack) {
+        databaseReference.child("Pets").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot petsSnapshot) {
+                for (DataSnapshot petSnapshot : petsSnapshot.getChildren()) {
+                    petSnapshot.getRef().child("gpsTrack").setValue(newGpsTrack)
+                            .addOnSuccessListener(aVoid -> showToast("Updated gpsTrack for pet: " + petSnapshot.getKey()))
+                            .addOnFailureListener(e -> showToast("Failed to update gpsTrack: " + e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Failed to fetch Pets: " + error.getMessage());
+            }
+        });
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         googleMap = map;
@@ -120,12 +162,11 @@ public class MapsDashboard extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void verifyAndPinPetLocation(String petId) {
-        // Verify if petId exists in petLocation
         databaseReference.child("Pets").child(petId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot petLocationSnapshot) {
                 if (petLocationSnapshot.exists()) {
-                    String locTracker = petLocationSnapshot.child("petLocation").getValue(String.class);
+                    String locTracker = petLocationSnapshot.child("gpsTrack").getValue(String.class);
 
                     if (locTracker != null) {
                         LatLng coordinates = extractCoordinatesFromUrl(locTracker);
@@ -160,40 +201,14 @@ public class MapsDashboard extends AppCompatActivity implements OnMapReadyCallba
                 return null;
             }
 
-            // Check if it's a Google Maps redirect URL
-            if (locTrackerUrl.contains("https://maps.app.goo.gl/")) {
-                // Open a connection to follow the redirect
-                java.net.URL url = new java.net.URL(locTrackerUrl);
-                java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
-                connection.setInstanceFollowRedirects(false);  // Disable automatic redirection
-                connection.connect();
-
-                // Get the redirect location (it will be the real Google Maps link)
-                String redirectUrl = connection.getHeaderField("Location");
-                connection.disconnect();
-
-                // If the redirection URL is valid, extract the coordinates from the final URL
-                if (redirectUrl != null && redirectUrl.contains("https://www.google.com/maps/place/")) {
-                    String[] parts = redirectUrl.split("q=");
-                    if (parts.length > 1) {
-                        String[] coords = parts[1].split(",");
-                        if (coords.length >= 2) {
-                            double latitude = Double.parseDouble(coords[0]);
-                            double longitude = Double.parseDouble(coords[1]);
-                            return new LatLng(latitude, longitude);
-                        }
-                    }
-                }
-            } else {
-                // If not a redirect URL, handle directly (e.g., Google Maps with 'q=latitude,longitude')
-                String[] urlParts = locTrackerUrl.split("q=");
-                if (urlParts.length > 1) {
-                    String[] coords = urlParts[1].split(",");
-                    if (coords.length >= 2) {
-                        double latitude = Double.parseDouble(coords[0]);
-                        double longitude = Double.parseDouble(coords[1]);
-                        return new LatLng(latitude, longitude);
-                    }
+            // Handle URL parsing logic here
+            String[] urlParts = locTrackerUrl.split("q=");
+            if (urlParts.length > 1) {
+                String[] coords = urlParts[1].split(",");
+                if (coords.length >= 2) {
+                    double latitude = Double.parseDouble(coords[0]);
+                    double longitude = Double.parseDouble(coords[1]);
+                    return new LatLng(latitude, longitude);
                 }
             }
         } catch (Exception e) {

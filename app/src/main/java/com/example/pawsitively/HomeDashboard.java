@@ -137,7 +137,7 @@ public class HomeDashboard extends AppCompatActivity {
     }
 
     private void listenForPetLocation(String petId, BottomNavigationView bottomNavigationView) {
-        petsRef.child(petId).child("petLocation").addValueEventListener(new ValueEventListener() {
+        petsRef.child(petId).child("gpsTrack").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
